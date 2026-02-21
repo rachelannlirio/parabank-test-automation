@@ -10,6 +10,8 @@ export default defineConfig({
   use: {
     baseURL: 'https://parabank.parasoft.com',
     trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
   },
 
   projects: [

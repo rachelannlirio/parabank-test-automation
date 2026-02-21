@@ -1,8 +1,8 @@
 import { expect, Page } from '@playwright/test'
 import { PATHS } from '../../utils/constants'
-import { ParaBankBase } from './ParaBankBase'
+import { Authenticated } from './Authenticated'
 
-export class AccountDashboard extends ParaBankBase {
+export class AccountDashboard extends Authenticated {
   private static readonly LABELS = {
     accountCreated:
       'Your account was created successfully. You are now logged in.',

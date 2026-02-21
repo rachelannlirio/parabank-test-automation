@@ -1,6 +1,8 @@
 import { Page } from '@playwright/test'
 import { AboutUs } from './paraBank/AboutUs'
 import { AccountDashboard } from './paraBank/AccountDashboard'
+import { AccountServicesMenu } from './paraBank/accountServices/AccountServicesMenu'
+import { OpenNewAccount } from './paraBank/accountServices/OpenNewAccount'
 import { AdminPage } from './paraBank/AdminPage'
 import { CustomerCare } from './paraBank/CustomerCare'
 import { HeaderNavigation } from './paraBank/HeaderNavigation'
@@ -23,6 +25,9 @@ class PageManager {
   private _adminPage?: AdminPage
   private _customerCare?: CustomerCare
   private _headerNavigation?: HeaderNavigation
+  private _accountServicesMenu?: AccountServicesMenu
+
+  private _openNewAccount?: OpenNewAccount
 
   private _products?: Products
   private _contactUs?: ContactUs
@@ -78,11 +83,25 @@ class PageManager {
     return this._customerCare
   }
 
+  get accountServicesMenu(): AccountServicesMenu {
+    if (!this._accountServicesMenu) {
+      this._accountServicesMenu = new AccountServicesMenu(this.page)
+    }
+    return this._accountServicesMenu
+  }
+
   get headerNavigation(): HeaderNavigation {
     if (!this._headerNavigation) {
       this._headerNavigation = new HeaderNavigation(this.page)
     }
     return this._headerNavigation
+  }
+
+  get openNewAccount(): OpenNewAccount {
+    if (!this._openNewAccount) {
+      this._openNewAccount = new OpenNewAccount(this.page)
+    }
+    return this._openNewAccount
   }
 
   get products(): Products {

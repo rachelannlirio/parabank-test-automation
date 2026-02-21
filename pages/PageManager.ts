@@ -1,21 +1,33 @@
 import { Page } from '@playwright/test'
-import { AccountDashboard } from './AccountDashboard'
-import { HeaderNavigation } from './HeaderNavigation'
-import { Home } from './Home'
-import { Register } from './Register'
+import { AboutUs } from './paraBank/AboutUs'
+import { AccountDashboard } from './paraBank/AccountDashboard'
+import { AdminPage } from './paraBank/AdminPage'
+import { CustomerCare } from './paraBank/CustomerCare'
+import { HeaderNavigation } from './paraBank/HeaderNavigation'
+import { Home } from './paraBank/Home'
+import { Register } from './paraBank/Register'
+import { Services } from './paraBank/Services'
+import { ContactUs } from './paraSoft/ContactUs'
+import { Products } from './paraSoft/Products'
 
 /**
  * Centralized PageManager to manage all page objects
  * Provides lazy initialization and consistent access to page objects
  */
 class PageManager {
-
   private _home?: Home
   private _register?: Register
   private _accountDashboard?: AccountDashboard
+  private _aboutUs?: AboutUs
+  private _services?: Services
+  private _adminPage?: AdminPage
+  private _customerCare?: CustomerCare
   private _headerNavigation?: HeaderNavigation
 
-  constructor(private page: Page) { }
+  private _products?: Products
+  private _contactUs?: ContactUs
+
+  constructor(private page: Page) {}
 
   get home(): Home {
     if (!this._home) {
@@ -31,6 +43,41 @@ class PageManager {
     return this._register
   }
 
+  get accountDashboard(): AccountDashboard {
+    if (!this._accountDashboard) {
+      this._accountDashboard = new AccountDashboard(this.page)
+    }
+    return this._accountDashboard
+  }
+
+  get aboutUs(): AboutUs {
+    if (!this._aboutUs) {
+      this._aboutUs = new AboutUs(this.page)
+    }
+    return this._aboutUs
+  }
+
+  get services(): Services {
+    if (!this._services) {
+      this._services = new Services(this.page)
+    }
+    return this._services
+  }
+
+  get adminPage(): AdminPage {
+    if (!this._adminPage) {
+      this._adminPage = new AdminPage(this.page)
+    }
+    return this._adminPage
+  }
+
+  get customerCare(): CustomerCare {
+    if (!this._customerCare) {
+      this._customerCare = new CustomerCare(this.page)
+    }
+    return this._customerCare
+  }
+
   get headerNavigation(): HeaderNavigation {
     if (!this._headerNavigation) {
       this._headerNavigation = new HeaderNavigation(this.page)
@@ -38,11 +85,18 @@ class PageManager {
     return this._headerNavigation
   }
 
-  get accountDashboard(): AccountDashboard {
-    if (!this._accountDashboard) {
-      this._accountDashboard = new AccountDashboard(this.page)
+  get products(): Products {
+    if (!this._products) {
+      this._products = new Products(this.page)
     }
-    return this._accountDashboard
+    return this._products
+  }
+
+  get contactUs(): ContactUs {
+    if (!this._contactUs) {
+      this._contactUs = new ContactUs(this.page)
+    }
+    return this._contactUs
   }
 
   getPage(): Page {

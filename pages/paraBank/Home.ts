@@ -1,18 +1,18 @@
 import { type Page } from '@playwright/test'
-import { Base } from './Base'
+import { PATHS } from '../../utils/constants'
+import { ParaBankBase } from './ParaBankBase'
 
-export class Home extends Base {
-
+export class Home extends ParaBankBase {
   private static readonly LABELS = {
     registerLink: 'Register',
-  } as const;
+  } as const
 
   constructor(protected page: Page) {
     super(page)
   }
 
-  async open(path: string = '/parabank/index.htm') {
-    await this.goTo(path)
+  async open() {
+    await super.open(PATHS.home)
   }
 
   get registerLink() {

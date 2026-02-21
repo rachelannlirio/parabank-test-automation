@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test"
+import { Page } from '@playwright/test'
 
 export class Base {
   protected readonly page: Page
@@ -7,7 +7,7 @@ export class Base {
     this.page = page
   }
 
-  async goTo(path: string) {
+  async open(path: string) {
     await this.page.goto(path)
   }
 }

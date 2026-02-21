@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "Automation test suite for ParaBank web app",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "playwright test --headed",
+    "test:headed": "playwright test --headed",
+    "test:report": "playwright show-report"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rachelannlirio/parabank-test-automation.git"

@@ -12,3 +12,9 @@ export type User = {
   username: string
   password: string
 }
+
+export type AccountDetails = {
+  accountId: string
+  balance: string
+  availableAmount: string
+}

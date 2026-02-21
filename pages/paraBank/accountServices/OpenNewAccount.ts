@@ -54,6 +54,10 @@ export class OpenNewAccount extends Authenticated {
     })
   }
 
+  get firstAccountId() {
+    return this.fromAccountSelect.locator('option').first()
+  }
+
   get newAccountId() {
     return this.page.locator(OpenNewAccount.SELECTORS.newAccountId)
   }
@@ -63,14 +67,15 @@ export class OpenNewAccount extends Authenticated {
   }
 
   async openNewAccount() {
-    await this.page.waitForResponse(
-      /\/parabank\/services_proxy\/bank\/customers\/\d+\/accounts/,
-    )
     await this.accountTypeSelect.selectOption({ label: 'SAVINGS' })
     await this.clickOpenNewAccountButton()
     await this.page.waitForResponse(
       /\/parabank\/services_proxy\/bank\/createAccount\?customerId=\d+&newAccountType=\d+&fromAccountId=\d+/,
     )
+  }
+
+  async getFirstAccountIdNumber() {
+    return this.firstAccountId.textContent()
   }
 
   async getNewAccountIdNumber() {

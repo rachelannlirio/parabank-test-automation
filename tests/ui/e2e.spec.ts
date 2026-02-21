@@ -1,7 +1,8 @@
 import { expect } from '@playwright/test'
 import { test } from '../../fixtures/testFixture'
+import { BALANCES } from '../../utils/constants'
 import { generateRandomUserData } from '../../utils/randomGenerator'
-import { User } from '../../utils/types'
+import { AccountDetails, User } from '../../utils/types'
 
 test.describe('UI E2E Tests', () => {
   let userData: User
@@ -72,7 +73,18 @@ test.describe('UI E2E Tests', () => {
     //     .toBeVisible()
     // })
 
-    let newAccountId: string
+    let initialFirstAccount: AccountDetails
+    // Take a snapshot of the account balances before creating a new account, then compare it with the snapshot after creating a new account to verify that the balance details are updated as expected in the Accounts Overview page.
+    await test.step('Take a snapshot of the account balances before creating a new account', async () => {
+      await pageManager.accountServicesMenu.clickAccountsOverviewLink()
+      await expect(
+        pageManager.accountsOverview.accountsOverviewHeader,
+      ).toBeVisible()
+      await expect(pageManager.accountsOverview.accountsTable).toBeVisible()
+      initialFirstAccount =
+        await pageManager.accountsOverview.getFirstAccountDetails()
+    })
+
     await test.step('Verify user can create a new account', async () => {
       await pageManager.accountServicesMenu.clickOpenNewAccountLink()
       await expect
@@ -83,7 +95,25 @@ test.describe('UI E2E Tests', () => {
       await expect(
         pageManager.openNewAccount.accountOpenedMessage,
       ).toBeVisible()
-      newAccountId = (await pageManager.openNewAccount.getNewAccountIdNumber())!
+    })
+
+    await test.step('Verify Accounts Overview is displaying the balance details as expected', async () => {
+      await pageManager.accountServicesMenu.clickAccountsOverviewLink()
+      await expect(
+        pageManager.accountsOverview.accountsOverviewHeader,
+      ).toBeVisible()
+      await expect(pageManager.accountsOverview.accountsTable).toBeVisible()
+
+      const newAccountDetails =
+        await pageManager.accountsOverview.getNewAccountDetails()
+      expect(newAccountDetails.balance).toEqual(BALANCES.newAccountBalance)
+      const updatedFirstAccount =
+        await pageManager.accountsOverview.getFirstAccountDetails()
+      expect(updatedFirstAccount.balance).toEqual(
+        BALANCES.updatedFirstAccountBalance,
+      )
+      const totalBalance = await pageManager.accountsOverview.getTotalBalance()
+      expect(totalBalance).toEqual(BALANCES.totalBalance)
     })
   })
 })

@@ -2,6 +2,7 @@ import { Page } from '@playwright/test'
 import { AboutUs } from './paraBank/AboutUs'
 import { AccountDashboard } from './paraBank/AccountDashboard'
 import { AccountServicesMenu } from './paraBank/accountServices/AccountServicesMenu'
+import { AccountsOverview } from './paraBank/accountServices/AccountsOverview'
 import { OpenNewAccount } from './paraBank/accountServices/OpenNewAccount'
 import { AdminPage } from './paraBank/AdminPage'
 import { CustomerCare } from './paraBank/CustomerCare'
@@ -28,6 +29,7 @@ class PageManager {
   private _accountServicesMenu?: AccountServicesMenu
 
   private _openNewAccount?: OpenNewAccount
+  private _accountsOverview?: AccountsOverview
 
   private _products?: Products
   private _contactUs?: ContactUs
@@ -102,6 +104,13 @@ class PageManager {
       this._openNewAccount = new OpenNewAccount(this.page)
     }
     return this._openNewAccount
+  }
+
+  get accountsOverview(): AccountsOverview {
+    if (!this._accountsOverview) {
+      this._accountsOverview = new AccountsOverview(this.page)
+    }
+    return this._accountsOverview
   }
 
   get products(): Products {

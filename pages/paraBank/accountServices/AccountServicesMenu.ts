@@ -71,6 +71,9 @@ export class AccountServicesMenu {
 
   async clickOpenNewAccountLink() {
     await this.openNewAccountLink.click()
+    await this.page.waitForResponse(
+      /\/parabank\/services_proxy\/bank\/customers\/\d+\/accounts/,
+    )
   }
 
   async clickAccountsOverviewLink() {

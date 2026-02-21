@@ -1,0 +1,23 @@
+{
+  "name": "parabank-test-automation",
+  "version": "1.0.0",
+  "description": "Automation test suite for ParaBank web app",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rachelannlirio/parabank-test-automation.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/rachelannlirio/parabank-test-automation/issues"
+  },
+  "homepage": "https://github.com/rachelannlirio/parabank-test-automation#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.3.0"
+  }
+}

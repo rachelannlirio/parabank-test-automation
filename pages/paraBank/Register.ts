@@ -96,6 +96,7 @@ export class Register extends ParaBankBase {
   async registerNewUser(user: User) {
     console.log('username: ' + user.username)
     console.log('password: ' + user.password)
+    // await this.page.pause()
     await this.firstNameField.fill(user.firstName)
     await this.lastNameField.fill(user.lastName)
     await this.addressField.fill(user.address.street)
@@ -107,6 +108,8 @@ export class Register extends ParaBankBase {
     await this.usernameField.fill(user.username)
     await this.passwordField.fill(user.password)
     await this.confirmPasswordField.fill(user.password)
+    await this.page.waitForLoadState('networkidle')
+    // await this.page.pause()
     await this.submitButton.click()
   }
 }

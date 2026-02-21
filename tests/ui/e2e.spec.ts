@@ -74,6 +74,8 @@ test.describe('UI E2E Tests', () => {
     // })
 
     let initialFirstAccount: AccountDetails
+    let newAccount: AccountDetails
+    let updatedFirstAccount: AccountDetails
     // Take a snapshot of the account balances before creating a new account, then compare it with the snapshot after creating a new account to verify that the balance details are updated as expected in the Accounts Overview page.
     await test.step('Take a snapshot of the account balances before creating a new account', async () => {
       await pageManager.accountServicesMenu.clickAccountsOverviewLink()
@@ -104,10 +106,9 @@ test.describe('UI E2E Tests', () => {
       ).toBeVisible()
       await expect(pageManager.accountsOverview.accountsTable).toBeVisible()
 
-      const newAccountDetails =
-        await pageManager.accountsOverview.getNewAccountDetails()
-      expect(newAccountDetails.balance).toEqual(BALANCES.newAccountBalance)
-      const updatedFirstAccount =
+      newAccount = await pageManager.accountsOverview.getNewAccountDetails()
+      expect(newAccount.balance).toEqual(BALANCES.newAccountBalance)
+      updatedFirstAccount =
         await pageManager.accountsOverview.getFirstAccountDetails()
       expect(updatedFirstAccount.balance).toEqual(
         BALANCES.updatedFirstAccountBalance,

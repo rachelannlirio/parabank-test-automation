@@ -1,4 +1,5 @@
 import { Page } from '@playwright/test'
+import { AccountDashboard } from './AccountDashboard'
 import { HeaderNavigation } from './HeaderNavigation'
 import { Home } from './Home'
 import { Register } from './Register'
@@ -11,6 +12,7 @@ class PageManager {
 
   private _home?: Home
   private _register?: Register
+  private _accountDashboard?: AccountDashboard
   private _headerNavigation?: HeaderNavigation
 
   constructor(private page: Page) { }
@@ -34,6 +36,13 @@ class PageManager {
       this._headerNavigation = new HeaderNavigation(this.page)
     }
     return this._headerNavigation
+  }
+
+  get accountDashboard(): AccountDashboard {
+    if (!this._accountDashboard) {
+      this._accountDashboard = new AccountDashboard(this.page)
+    }
+    return this._accountDashboard
   }
 
   getPage(): Page {

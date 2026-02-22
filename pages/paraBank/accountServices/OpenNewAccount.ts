@@ -66,6 +66,7 @@ export class OpenNewAccount extends Authenticated {
     await this.openNewAccountButton.click()
   }
 
+  // TODO: Add parameters for account type and from account ID
   async openNewAccount() {
     await this.accountTypeSelect.selectOption({ label: 'SAVINGS' })
     await this.clickOpenNewAccountButton()
@@ -74,11 +75,11 @@ export class OpenNewAccount extends Authenticated {
     )
   }
 
-  async getFirstAccountIdNumber() {
+  async getInitialAccountNumber() {
     return this.firstAccountId.textContent()
   }
 
-  async getNewAccountIdNumber() {
+  async getNewAccountNumber() {
     return this.newAccountId.textContent()
   }
 }

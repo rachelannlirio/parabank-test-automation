@@ -4,6 +4,7 @@ import { AccountDashboard } from './paraBank/AccountDashboard'
 import { AccountServicesMenu } from './paraBank/accountServices/AccountServicesMenu'
 import { AccountsOverview } from './paraBank/accountServices/AccountsOverview'
 import { OpenNewAccount } from './paraBank/accountServices/OpenNewAccount'
+import { TransferFunds } from './paraBank/accountServices/TransferFunds'
 import { AdminPage } from './paraBank/AdminPage'
 import { CustomerCare } from './paraBank/CustomerCare'
 import { HeaderNavigation } from './paraBank/HeaderNavigation'
@@ -30,6 +31,7 @@ class PageManager {
 
   private _openNewAccount?: OpenNewAccount
   private _accountsOverview?: AccountsOverview
+  private _transferFunds?: TransferFunds
 
   private _products?: Products
   private _contactUs?: ContactUs
@@ -111,6 +113,13 @@ class PageManager {
       this._accountsOverview = new AccountsOverview(this.page)
     }
     return this._accountsOverview
+  }
+
+  get transferFunds(): TransferFunds {
+    if (!this._transferFunds) {
+      this._transferFunds = new TransferFunds(this.page)
+    }
+    return this._transferFunds
   }
 
   get products(): Products {

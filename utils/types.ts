@@ -13,8 +13,19 @@ export type User = {
   password: string
 }
 
-export type AccountDetails = {
+export type Account = {
   accountId: string
-  balance: string
-  availableAmount: string
+  balance: number
+  availableAmount: number
+}
+
+export type AccountsSnapshot = {
+  accounts: Account[]
+  totalBalance: number
+}
+
+export type TransferFundsDetails = {
+  fromAccount: Account
+  toAccount: Account
+  amount: number
 }

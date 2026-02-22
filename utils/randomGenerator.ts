@@ -20,3 +20,7 @@ export function generateRandomUserData(): User {
     password: faker.internet.password({ length: 10 }),
   }
 }
+
+export function generateRandomAmount(min: number, max: number): number {
+  return parseFloat(faker.finance.amount({ min, max, dec: 2 }))
+}

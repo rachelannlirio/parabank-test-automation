@@ -69,15 +69,20 @@ export class AccountServicesMenu {
     })
   }
 
-  async clickOpenNewAccountLink() {
-    await this.openNewAccountLink.click()
+  async waitForAccountsToLoad() {
     await this.page.waitForResponse(
       /\/parabank\/services_proxy\/bank\/customers\/\d+\/accounts/,
     )
   }
 
+  async clickOpenNewAccountLink() {
+    await this.openNewAccountLink.click()
+    await this.waitForAccountsToLoad()
+  }
+
   async clickAccountsOverviewLink() {
     await this.accountsOverviewLink.click()
+    await this.waitForAccountsToLoad()
   }
 
   async clickTransferFundsLink() {

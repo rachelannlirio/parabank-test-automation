@@ -10,8 +10,6 @@ export const LABELS = {
 }
 
 export const BALANCES = {
-  initialFirstAccountBalance: '$515.50',
-  totalBalance: '$515.50',
-  newAccountBalance: '$100.00',
-  updatedFirstAccountBalance: '$415.50',
+  initialAccountBalance: 515.5, // Default initial balance for a newly registered user
+  newAccountBalance: 100, // Default balance transferred to a newly opened account
 }

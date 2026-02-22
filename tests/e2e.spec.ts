@@ -1,30 +1,29 @@
 import { expect } from '@playwright/test'
-import { test } from '../../fixtures/testFixture'
-import {
-  ACCOUNT_TYPE,
-  LABELS,
-  NEW_ACCOUNT_BALANCE,
-} from '../../utils/constants'
+import { test } from '../fixtures/testFixture'
+import { ACCOUNT_TYPE, LABELS, NEW_ACCOUNT_BALANCE } from '../utils/constants'
 import {
   generateRandomAmount,
   generateRandomBillPayDetails,
   generateRandomUserData,
-} from '../../utils/randomGenerator'
+} from '../utils/randomGenerator'
 import {
   Account,
   AccountsSnapshot,
+  BillPayDetails,
+  Transaction,
   TransferFundsDetails,
   User,
-} from '../../utils/types'
+} from '../utils/types'
 
-test.describe('UI E2E Tests', () => {
+test.describe('E2E Tests', () => {
   let userData: User
   test.beforeEach(({}) => {
     userData = generateRandomUserData()
   })
 
-  test('Newly registered user can perform various actions', async ({
+  test('Newly registered user can use various account services', async ({
     pageManager,
+    request,
   }) => {
     await test.step('Navigate to ParaBank home page', async () => {
       await pageManager.home.open()
@@ -38,6 +37,7 @@ test.describe('UI E2E Tests', () => {
       await pageManager.accountDashboard.verifyWelcomeMessage(userData.username)
     })
 
+    // No need to login because user is automatically logged in after registration
     await test.step('Verify upper left Global Navigation menu is working as expected', async () => {
       await pageManager.headerNavigation.clickAboutUsLink()
       await expect.soft(pageManager.aboutUs.aboutUsHeader).toBeVisible()
@@ -144,17 +144,35 @@ test.describe('UI E2E Tests', () => {
       )
     })
 
+    let billPayDetails: BillPayDetails
     await test.step('Pay a bill with the newly created account', async () => {
       await pageManager.accountServicesMenu.clickBillPayLink()
       await expect.soft(pageManager.billPay.billPayHeader).toBeVisible()
 
       const amountToPay = generateRandomAmount(1, newAccount.balance)
-      const billPayDetails = generateRandomBillPayDetails(
-        amountToPay,
-        newAccount,
-      )
+      billPayDetails = generateRandomBillPayDetails(amountToPay, newAccount)
       await pageManager.billPay.payBill(billPayDetails)
       await pageManager.billPay.verifyBillPayMessage(billPayDetails)
+    })
+
+    await test.step('Verify Find Transactions by amount API call', async () => {
+      const path = `/parabank/services/bank/accounts/${newAccountId}/transactions/amount/${billPayDetails.amount}`
+
+      const response = await request.get(path, {
+        headers: {
+          accept: 'application/json',
+        },
+      })
+      expect(response).toBeOK()
+      const transactions: Transaction[] = await response.json()
+      expect.soft(transactions[0].id).toBe(expect.any(Number))
+      expect.soft(transactions[0].accountId).toBe(newAccountId)
+      expect.soft(transactions[0].type).toBe('Debit')
+      expect.soft(transactions[0].date).toBeLessThan(new Date().getTime())
+      expect.soft(transactions[0].amount).toBe(billPayDetails.amount)
+      expect
+        .soft(transactions[0].description)
+        .toEqual(`Bill payment to ${billPayDetails.payee.name}`)
     })
   })
 })

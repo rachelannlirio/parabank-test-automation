@@ -36,6 +36,6 @@ To view test report
 ## Test Report Email
 The configuration for sending the email is set in Github Actions secrets and variables.
 
-**Sample email**
+**Sample email**  
 <img width="563" height="397" alt="sample_test_report_email" src="https://github.com/user-attachments/assets/d043df63-02cb-4d6c-aa89-2a29e8c700c0" />
 

@@ -38,9 +38,9 @@ export class AccountDashboard extends Authenticated {
     })
   }
 
-  async verifyWelcomeMessage(firstName: string) {
+  async verifyWelcomeMessage(username: string) {
     await expect(
-      this.rightPanel.getByRole('heading', { name: `Welcome ${firstName}` }),
+      this.rightPanel.getByRole('heading', { name: `Welcome ${username}` }),
     ).toBeVisible()
   }
 }

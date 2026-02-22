@@ -1,4 +1,5 @@
 import { expect, Page } from '@playwright/test'
+import { TransferFundsDetails } from '../../../utils/types'
 import { Authenticated } from '../Authenticated'
 
 export class TransferFunds extends Authenticated {
@@ -55,20 +56,20 @@ export class TransferFunds extends Authenticated {
     return await this.showResult.getByRole('paragraph').first().textContent()
   }
 
-  async transferFunds(fromAccount: string, toAccount: string, amount: number) {
-    await this.amountInput.fill(amount.toString())
-    await this.fromAccountSelect.selectOption({ label: fromAccount })
-    await this.toAccountSelect.selectOption({ label: toAccount })
+  async transferFunds(details: TransferFundsDetails) {
+    await this.amountInput.fill(details.amount.toString())
+    await this.fromAccountSelect.selectOption({
+      label: details.fromAccount.accountId,
+    })
+    await this.toAccountSelect.selectOption({
+      label: details.toAccount.accountId,
+    })
     await this.transferButton.click()
   }
 
-  async verifyTransferMessage(
-    fromAccount: string,
-    toAccount: string,
-    amount: number,
-  ) {
-    const expectedMessage = `$${amount.toFixed(2)} has been transferred from account #${fromAccount} to account #${toAccount}.`
-    const actualMessage = await this.getTransferMessage()
+  async verifyTransferMessage(details: TransferFundsDetails) {
+    const expectedMessage = `$${details.amount.toFixed(2)} has been transferred from account #${details.fromAccount.accountId} to account #${details.toAccount.accountId}.`
+    const actualMessage = (await this.getTransferMessage())?.trim()
     expect.soft(actualMessage).toBe(expectedMessage)
   }
 }

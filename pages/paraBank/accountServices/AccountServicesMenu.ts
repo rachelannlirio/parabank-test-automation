@@ -87,6 +87,7 @@ export class AccountServicesMenu {
 
   async clickTransferFundsLink() {
     await this.transferFundsLink.click()
+    await this.waitForAccountsToLoad()
   }
 
   async clickBillPayLink() {

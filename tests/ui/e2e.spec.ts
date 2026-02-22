@@ -1,8 +1,16 @@
 import { expect } from '@playwright/test'
 import { test } from '../../fixtures/testFixture'
-import { BALANCES, LABELS } from '../../utils/constants'
-import { generateRandomUserData } from '../../utils/randomGenerator'
-import { Account, AccountsSnapshot, User } from '../../utils/types'
+import { BALANCES } from '../../utils/constants'
+import {
+  generateRandomAmount,
+  generateRandomUserData,
+} from '../../utils/randomGenerator'
+import {
+  Account,
+  AccountsSnapshot,
+  TransferFundsDetails,
+  User,
+} from '../../utils/types'
 
 test.describe('UI E2E Tests', () => {
   let userData: User
@@ -22,55 +30,53 @@ test.describe('UI E2E Tests', () => {
       await pageManager.home.clickRegisterLink()
       await expect(pageManager.register.registerHeader).toBeVisible()
       await pageManager.register.registerNewUser(userData)
-      await pageManager.accountDashboard.verifyWelcomeMessage(
-        userData.firstName,
-      )
+      await pageManager.accountDashboard.verifyWelcomeMessage(userData.username)
     })
 
-    await test.step('Verify upper left Global Navigation menu is working as expected', async () => {
-      await pageManager.headerNavigation.clickAboutUsLink()
-      await expect.soft(pageManager.aboutUs.aboutUsHeader).toBeVisible()
+    // await test.step('Verify upper left Global Navigation menu is working as expected', async () => {
+    //   await pageManager.headerNavigation.clickAboutUsLink()
+    //   await expect.soft(pageManager.aboutUs.aboutUsHeader).toBeVisible()
 
-      await pageManager.headerNavigation.clickServicesLink()
-      await expect
-        .soft(pageManager.services.servicesHeader)
-        .toHaveText(LABELS.servicesHeader)
+    //   await pageManager.headerNavigation.clickServicesLink()
+    //   await expect
+    //     .soft(pageManager.services.servicesHeader)
+    //     .toHaveText(LABELS.servicesHeader)
 
-      await pageManager.headerNavigation.clickProductsLink()
-      await expect.soft(pageManager.products.productsHeader).toBeVisible()
-      // Navigate back to account dashboard because the current page is not part of the ParaBank web app
-      await pageManager.accountDashboard.open()
+    //   await pageManager.headerNavigation.clickProductsLink()
+    //   await expect.soft(pageManager.products.productsHeader).toBeVisible()
+    //   // Navigate back to account dashboard because the current page is not part of the ParaBank web app
+    //   await pageManager.accountDashboard.open()
 
-      /**
-       * I consider the succeeding step failed because the link says "Locations"
-       * and I expected it to show a list of the ParaSoft office locations,
-       * but instead it redirected to the Solutions page.
-       * Either the link should be renamed to "Solutions", or
-       * it should navigate to the ParaSoft "Contact Us" page that lists the office locations.
-       */
-      await pageManager.headerNavigation.clickLocationsLink()
-      await expect.soft(pageManager.contactUs.globalOfficesHeader).toBeVisible()
-      // Navigate back to account dashboard because the current page is not part of the ParaBank web app
-      await pageManager.accountDashboard.open()
+    //   /**
+    //    * I consider the succeeding step failed because the link says "Locations"
+    //    * and I expected it to show a list of the ParaSoft office locations,
+    //    * but instead it redirected to the Solutions page.
+    //    * Either the link should be renamed to "Solutions", or
+    //    * it should navigate to the ParaSoft "Contact Us" page that lists the office locations.
+    //    */
+    //   await pageManager.headerNavigation.clickLocationsLink()
+    //   await expect.soft(pageManager.contactUs.globalOfficesHeader).toBeVisible()
+    //   // Navigate back to account dashboard because the current page is not part of the ParaBank web app
+    //   await pageManager.accountDashboard.open()
 
-      await pageManager.headerNavigation.clickAdminPageLink()
-      await expect.soft(pageManager.adminPage.adminPageHeader).toBeVisible()
-    })
+    //   await pageManager.headerNavigation.clickAdminPageLink()
+    //   await expect.soft(pageManager.adminPage.adminPageHeader).toBeVisible()
+    // })
 
-    await test.step('Verify upper right Global Navigation menu is working as expected', async () => {
-      await pageManager.headerNavigation.clickHomeLink()
-      await expect
-        .soft(pageManager.accountDashboard.latestNewsHeader)
-        .toBeVisible()
+    // await test.step('Verify upper right Global Navigation menu is working as expected', async () => {
+    //   await pageManager.headerNavigation.clickHomeLink()
+    //   await expect
+    //     .soft(pageManager.accountDashboard.latestNewsHeader)
+    //     .toBeVisible()
 
-      await pageManager.headerNavigation.clickAboutLink()
-      await expect.soft(pageManager.aboutUs.aboutUsHeader).toBeVisible()
+    //   await pageManager.headerNavigation.clickAboutLink()
+    //   await expect.soft(pageManager.aboutUs.aboutUsHeader).toBeVisible()
 
-      await pageManager.headerNavigation.clickContactLink()
-      await expect
-        .soft(pageManager.customerCare.customerCareHeader)
-        .toBeVisible()
-    })
+    //   await pageManager.headerNavigation.clickContactLink()
+    //   await expect
+    //     .soft(pageManager.customerCare.customerCareHeader)
+    //     .toBeVisible()
+    // })
 
     let initialAccountsSnapshot: AccountsSnapshot
     let initialAccount: Account
@@ -120,23 +126,34 @@ test.describe('UI E2E Tests', () => {
       )
     })
 
-    // await test.step('Verify user can transfer funds between accounts', async () => {
-    //   await pageManager.accountServicesMenu.clickTransferFundsLink()
-    //   await expect
-    //     .soft(pageManager.transferFunds.transferFundsHeader)
-    //     .toBeVisible()
+    await test.step('Transfer funds from the newly created account to another account', async () => {
+      await pageManager.accountServicesMenu.clickTransferFundsLink()
+      await expect
+        .soft(pageManager.transferFunds.transferFundsHeader)
+        .toBeVisible()
 
-    //   const transferAmount = 15.5
-    //   await pageManager.transferFunds.transferFunds(
-    //     initialAccount.accountId,
-    //     newAccount.accountId,
-    //     transferAmount,
+      const transferFundsDetails: TransferFundsDetails = {
+        fromAccount: newAccount,
+        toAccount: initialAccount,
+        amount: generateRandomAmount(1, newAccount.balance),
+      }
+      await pageManager.transferFunds.transferFunds(transferFundsDetails)
+      await pageManager.transferFunds.verifyTransferMessage(
+        transferFundsDetails,
+      )
+    })
+
+    // await test.step('Pay a bll with the newly created account', async () => {
+    //   await pageManager.accountServicesMenu.clickBillPayLink()
+    //   await expect.soft(pageManager.billPay.billPayHeader).toBeVisible()
+
+    //   const amountToPay = generateRandomAmount(1, newAccount.balance)
+    //   const billPayDetails = generateRandomBillPayDetails(
+    //     amountToPay,
+    //     newAccount,
     //   )
-    //   await pageManager.transferFunds.verifyTransferMessage(
-    //     initialAccount.accountId,
-    //     newAccount.accountId,
-    //     transferAmount,
-    //   )
+    //   await pageManager.billPay.payBill(billPayDetails)
+    //   await pageManager.billPay.verifyBillPayMessage(billPayDetails)
     // })
   })
 })

@@ -14,6 +14,7 @@ import { Register } from './paraBank/Register'
 import { Services } from './paraBank/Services'
 import { ContactUs } from './paraSoft/ContactUs'
 import { Products } from './paraSoft/Products'
+import { Solutions } from './paraSoft/Solutions'
 
 /**
  * Centralized PageManager to manage all page objects
@@ -37,6 +38,7 @@ class PageManager {
 
   private _products?: Products
   private _contactUs?: ContactUs
+  private _solutions?: Solutions
 
   constructor(private page: Page) {}
 
@@ -143,6 +145,13 @@ class PageManager {
       this._contactUs = new ContactUs(this.page)
     }
     return this._contactUs
+  }
+
+  get solutions(): Solutions {
+    if (!this._solutions) {
+      this._solutions = new Solutions(this.page)
+    }
+    return this._solutions
   }
 
   getPage(): Page {

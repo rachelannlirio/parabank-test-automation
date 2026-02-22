@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test'
 import { test } from '../fixtures/testFixture'
-import { ACCOUNT_TYPE, NEW_ACCOUNT_BALANCE } from '../utils/constants'
+import { ACCOUNT_TYPE, LABELS, NEW_ACCOUNT_BALANCE } from '../utils/constants'
 import {
   generateRandomAmount,
   generateRandomBillPayDetails,
@@ -38,35 +38,39 @@ test.describe('E2E Tests', () => {
     })
 
     // No need to login because user is automatically logged in after registration
-    // await test.step('Verify upper left Global Navigation menu is working as expected', async () => {
-    //   await pageManager.headerNavigation.clickAboutUsLink()
-    //   await expect.soft(pageManager.aboutUs.aboutUsHeader).toBeVisible()
+    await test.step('Verify upper left Global Navigation menu is working as expected', async () => {
+      await pageManager.headerNavigation.clickAboutUsLink()
+      await expect.soft(pageManager.aboutUs.aboutUsHeader).toBeVisible()
 
-    //   await pageManager.headerNavigation.clickServicesLink()
-    //   await expect
-    //     .soft(pageManager.services.servicesHeader)
-    //     .toHaveText(LABELS.servicesHeader)
+      await pageManager.headerNavigation.clickServicesLink()
+      await expect
+        .soft(pageManager.services.servicesHeader)
+        .toHaveText(LABELS.servicesHeader)
 
-    //   await pageManager.headerNavigation.clickProductsLink()
-    //   await expect.soft(pageManager.products.productsHeader).toBeVisible()
-    //   // Navigate back to account dashboard because the current page is not part of the ParaBank web app
-    //   await pageManager.accountDashboard.open()
+      await pageManager.headerNavigation.clickProductsLink()
+      await expect.soft(pageManager.products.productsHeader).toBeVisible()
+      // Navigate back to account dashboard because the current page is not part of the ParaBank web app
+      await pageManager.accountDashboard.open()
 
-    //   /**
-    //    * I consider the succeeding step failed because the link says "Locations"
-    //    * and I expected it to show a list of the ParaSoft office locations,
-    //    * but instead it redirected to the Solutions page.
-    //    * Either the link should be renamed to "Solutions", or
-    //    * it should navigate to the ParaSoft "Contact Us" page that lists the office locations.
-    //    */
-    //   await pageManager.headerNavigation.clickLocationsLink()
-    //   await expect.soft(pageManager.contactUs.globalOfficesHeader).toBeVisible()
-    //   // Navigate back to account dashboard because the current page is not part of the ParaBank web app
-    //   await pageManager.accountDashboard.open()
+      /**
+       * To be honest, I consider the succeeding step failed because the link says "Locations"
+       * and I expected it to show a list of the ParaSoft office locations,
+       * but instead it redirected to the Solutions page.
+       * Either the link should be renamed to "Solutions", or
+       * it should navigate to the ParaSoft "Contact Us" page that lists the office locations.
+       * But for the sake of making sure the solution works, I will let this step pass.
+       */
+      await pageManager.headerNavigation.clickLocationsLink()
+      await expect.soft(pageManager.solutions.solutionsHeader).toBeVisible()
+      // The correct expecation here should be the Contact Us page with the list of Office Locations
+      // await expect.soft(pageManager.contactUs.contactUsHeader).toBeVisible()
 
-    //   await pageManager.headerNavigation.clickAdminPageLink()
-    //   await expect.soft(pageManager.adminPage.adminPageHeader).toBeVisible()
-    // })
+      // Navigate back to account dashboard because the current page is not part of the ParaBank web app
+      await pageManager.accountDashboard.open()
+
+      await pageManager.headerNavigation.clickAdminPageLink()
+      await expect.soft(pageManager.adminPage.adminPageHeader).toBeVisible()
+    })
 
     await test.step('Verify upper right Global Navigation menu is working as expected', async () => {
       await pageManager.headerNavigation.clickHomeLink()

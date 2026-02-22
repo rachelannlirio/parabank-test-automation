@@ -79,7 +79,7 @@ export class BillPay extends Authenticated {
   }
 
   get sendPaymentButton() {
-    return this.page.getByRole('button', { name: 'Send Payment' })
+    return this.billPayForm.locator(BillPay.SELECTORS.sendPaymentButton)
   }
 
   get billPayResult() {
@@ -105,7 +105,11 @@ export class BillPay extends Authenticated {
     await this.fromAccountSelect.selectOption({
       label: details.fromAccount.accountId,
     })
+    await expect(this.fromAccountSelect).toHaveValue(
+      details.fromAccount.accountId,
+    )
     await this.sendPaymentButton.click()
+    await this.billPayResult.waitFor({ state: 'visible' })
   }
 
   async getBillPayMessage() {

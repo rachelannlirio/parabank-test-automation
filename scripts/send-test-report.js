@@ -18,8 +18,22 @@ const failedTests = allSpecs.filter((spec) => !spec.ok)
 
 const runUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`
 
+const failedList = failedTests
+  .map((spec) => {
+    const attachments = spec.tests
+      .flatMap((t) =>
+        t.results
+          .flatMap((r) => r.attachments || [])
+          .filter((a) => a.name === 'screenshot' || a.name === 'trace')
+          .map((a) => `<li>${a.name}: ${a.path}</li>`),
+      )
+      .join('')
+    return `<li><strong>${spec.title}</strong><ul>${attachments || '<li>No attachments</li>'}</ul></li>`
+  })
+  .join('')
+
 const html = `
-<h2>Playwright Test Report</h2>
+<h2>ParaBank Test Report</h2>
 <p><strong>Run:</strong> <a href="${runUrl}">${process.env.GITHUB_RUN_ID}</a></p>
 <ul>
   <li><span style="color: #22c55e; font-weight: bold;">Passed: ${passed}</span></li>

@@ -38,7 +38,7 @@ jobs:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           SMTP_FROM: ${{ secrets.SMTP_FROM }}
           EMAIL_RECIPIENTS: ${{ secrets.EMAIL_RECIPIENTS }}
-        run: node scripts/send-report.js
+        run: node scripts/send-test-report.js
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}

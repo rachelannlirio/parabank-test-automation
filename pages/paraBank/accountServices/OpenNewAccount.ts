@@ -4,7 +4,6 @@ import { Authenticated } from '../Authenticated'
 export class OpenNewAccount extends Authenticated {
   private static readonly LABELS = {
     openNewAccountHeader: 'Open New Account',
-    // openNewAccountButton: 'Open New Account',
     accountOpenedMessage: 'Account Opened!',
   } as const
 

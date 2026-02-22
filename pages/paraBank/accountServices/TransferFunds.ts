@@ -5,7 +5,6 @@ import { Authenticated } from '../Authenticated'
 export class TransferFunds extends Authenticated {
   private static readonly LABELS = {
     transferFundsHeader: 'Transfer Funds',
-    // transferButton: 'Transfer',
     transferComplete: 'Transfer Complete!',
   } as const
 

@@ -53,12 +53,13 @@ test.describe('E2E Tests', () => {
       await pageManager.accountDashboard.open()
 
       /**
+       * NOTE:
        * To be honest, I consider the succeeding step failed because the link says "Locations"
        * and I expected it to show a list of the ParaSoft office locations,
        * but instead it redirected to the Solutions page.
        * Either the link should be renamed to "Solutions", or
        * it should navigate to the ParaSoft "Contact Us" page that lists the office locations.
-       * But for the sake of making sure the solution works, I will let this step pass.
+       * But for the sake of making sure the test automation works, I will let this step pass.
        */
       await pageManager.headerNavigation.clickLocationsLink()
       await expect.soft(pageManager.solutions.solutionsHeader).toBeVisible()

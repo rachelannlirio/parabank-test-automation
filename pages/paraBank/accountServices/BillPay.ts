@@ -79,7 +79,6 @@ export class BillPay extends Authenticated {
   }
 
   get sendPaymentButton() {
-    // return this.billPayForm.locator(BillPay.SELECTORS.sendPaymentButton)
     return this.page.getByRole('button', { name: 'Send Payment' })
   }
 

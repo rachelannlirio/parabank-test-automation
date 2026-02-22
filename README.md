@@ -22,7 +22,7 @@ To view test report
 
 1. Navigate to Para bank application.
 2. Create a new user from user registration page (Ensure username is generated randomly and it is unique in every test execution).
-3. Login to the application with the user created in step 2. (No need for this step because user is automatically logged in after registration.)
+3. Login to the application with the user created in step 2. _(No need for this step because user is automatically logged in after registration.)_
 4. Verify if the Global navigation menu in home page is working as expected.
    - upper left navigation menu links
    - upper right navigation menu icons

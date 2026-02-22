@@ -39,9 +39,6 @@ export class Register extends ParaBankBase {
   }
 
   get firstNameField() {
-    // return this.registrationForm.getByRole("textbox", {
-    //   name: "First name",
-    // })
     return this.registrationForm.locator(Register.SELECTORS.firstNameField)
   }
 
@@ -91,7 +88,6 @@ export class Register extends ParaBankBase {
     return this.registrationForm.getByRole('button', {
       name: 'Register',
     })
-    // return this.registrationForm.locator(Register.SELECTORS.submitButton)
   }
 
   get usernameError() {

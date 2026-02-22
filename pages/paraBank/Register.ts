@@ -95,8 +95,6 @@ export class Register extends ParaBankBase {
   }
 
   async registerNewUser(user: User) {
-    console.log('username: ' + user.username)
-    console.log('password: ' + user.password)
     await this.firstNameField.waitFor({ state: 'visible' })
     await this.firstNameField.fill(user.firstName)
     await this.lastNameField.fill(user.lastName)

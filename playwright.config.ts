@@ -1,5 +1,21 @@
 import { defineConfig, devices } from '@playwright/test'
 
+const ENV = process.env.ENV?.toLowerCase()
+
+function getBaseUrl(env: string | undefined): string {
+  switch (env) {
+    case 'qa':
+      return 'https://qa-parabank.parasoft.com'
+    case 'staging':
+      return 'https://staging-parabank.parasoft.com'
+    case 'prod':
+    default:
+      return 'https://parabank.parasoft.com'
+  }
+}
+
+const baseUrl = getBaseUrl(ENV)
+
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
@@ -8,7 +24,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: [['html'], ['json', { outputFile: 'test-results/results.json' }]],
   use: {
-    baseURL: 'https://parabank.parasoft.com',
+    baseURL: baseUrl,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',

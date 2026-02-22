@@ -3,47 +3,20 @@ const nodemailer = require('nodemailer')
 
 const results = JSON.parse(fs.readFileSync('test-results/results.json', 'utf8'))
 
-const total = results.suites.flatMap((s) => s.specs).length
-let passed = 0,
-  failed = 0,
-  flaky = 0
-const failedTests = []
+const { expected: passed, unexpected: failed, flaky, skipped } = results.stats
+const total = passed + failed + flaky + skipped
 
-for (const suite of results.suites) {
-  for (const spec of suite.specs) {
-    const outcomes = spec.tests.flatMap((t) => t.results.map((r) => r.status))
-    const hasFailure =
-      outcomes.includes('failed') || outcomes.includes('timedOut')
-    const hasPassed = outcomes.includes('passed')
-    const retried = spec.tests.some((t) => t.results.length > 1)
-
-    if (hasFailure && !hasPassed) {
-      failed++
-      failedTests.push(spec)
-    } else if (retried && hasPassed) {
-      flaky++
-      passed++
-    } else {
-      passed++
-    }
-  }
+function collectSpecs(suites) {
+  return suites.flatMap((suite) => [
+    ...suite.specs,
+    ...collectSpecs(suite.suites || []),
+  ])
 }
 
-const runUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`
+const allSpecs = collectSpecs(results.suites)
+const failedTests = allSpecs.filter((spec) => !spec.ok)
 
-const failedList = failedTests
-  .map((spec) => {
-    const attachments = spec.tests
-      .flatMap((t) =>
-        t.results
-          .flatMap((r) => r.attachments || [])
-          .filter((a) => a.name === 'screenshot' || a.name === 'trace')
-          .map((a) => `<li>${a.name}: ${a.path}</li>`),
-      )
-      .join('')
-    return `<li><strong>${spec.title}</strong><ul>${attachments || '<li>No attachments</li>'}</ul></li>`
-  })
-  .join('')
+const runUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`
 
 const html = `
 <h2>Playwright Test Report</h2>

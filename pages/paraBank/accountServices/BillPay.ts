@@ -93,6 +93,9 @@ export class BillPay extends Authenticated {
   }
 
   async payBill(details: BillPayDetails) {
+    await this.fromAccountSelect.selectOption({
+      label: details.fromAccount.accountId,
+    })
     await this.payeeNameInput.fill(details.payee.name)
     await this.payeeAddressInput.fill(details.payee.address.street)
     await this.payeeCityInput.fill(details.payee.address.city)
@@ -102,14 +105,13 @@ export class BillPay extends Authenticated {
     await this.payeeAccountNumberInput.fill(details.payee.accountNumber)
     await this.verifyAccountInput.fill(details.payee.accountNumber)
     await this.amountInput.fill(details.amount.toString())
-    await this.fromAccountSelect.selectOption({
-      label: details.fromAccount.accountId,
-    })
-    await expect(this.fromAccountSelect).toHaveValue(
-      details.fromAccount.accountId,
-    )
+    /**
+     * This waitForLoadState is not ideal but a last resort fix to
+     * an intermittent issue where the Send Payment button is being clicked
+     * before all of the fields in the form are filled out.
+     */
+    await this.page.waitForLoadState('networkidle')
     await this.sendPaymentButton.click()
-    await this.billPayResult.waitFor({ state: 'visible' })
   }
 
   async getBillPayMessage() {

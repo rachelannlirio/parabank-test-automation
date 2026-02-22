@@ -32,9 +32,16 @@ const failedList = failedTests
   })
   .join('')
 
+const startTime = new Date(results.stats.startTime).toLocaleString('en-US', {
+  dateStyle: 'long',
+  timeStyle: 'short',
+  timeZone: 'Asia/Manila',
+})
+
 const html = `
 <h2>ParaBank Test Report</h2>
 <p><strong>Run:</strong> <a href="${runUrl}">${process.env.GITHUB_RUN_ID}</a></p>
+<p><strong>Date & Time:</strong> ${startTime} PHT</p>
 <ul>
   <li><span style="color: #22c55e; font-weight: bold;">Passed: ${passed}</span></li>
   <li><span style="color: #ef4444; font-weight: bold;">Failed: ${failed}</span></li>
@@ -56,7 +63,7 @@ transporter
   .sendMail({
     from: process.env.SMTP_FROM,
     to: process.env.EMAIL_RECIPIENTS,
-    subject: `Playwright Report — ${failed > 0 ? `${failed} failed` : 'All passed'} (${process.env.GITHUB_REF_NAME})`,
+    subject: `ParaBank Test Report — ${failed > 0 ? `${failed} failed` : 'All passed'} (${process.env.GITHUB_REF_NAME})`,
     html,
   })
   .then(() => console.log('Email sent'))

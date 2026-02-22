@@ -66,9 +66,8 @@ export class OpenNewAccount extends Authenticated {
     await this.openNewAccountButton.click()
   }
 
-  // TODO: Add parameters for account type and from account ID
-  async openNewAccount() {
-    await this.accountTypeSelect.selectOption({ label: 'SAVINGS' })
+  async openNewAccount(accountType: string) {
+    await this.accountTypeSelect.selectOption({ label: accountType })
     await this.clickOpenNewAccountButton()
     await this.page.waitForResponse(
       /\/parabank\/services_proxy\/bank\/createAccount\?customerId=\d+&newAccountType=\d+&fromAccountId=\d+/,

@@ -10,15 +10,15 @@ export class BillPay extends Authenticated {
 
   private static readonly SELECTORS = {
     billPayForm: '#billpayForm',
-    payeeNameInput: 'payee.name',
-    payeeAddressInput: 'payee.address.street',
-    payeeCityInput: 'payee.address.city',
-    payeeStateInput: 'payee.address.state',
-    payeeZipCodeInput: 'payee.address.zipCode',
-    payeePhoneNumberInput: 'payee.phoneNumber',
-    payeeAccountNumberInput: 'payee.accountNumber',
-    verifyAccountInput: 'verifyAccount',
-    amountInput: 'amount',
+    payeeNameInput: 'input[name="payee.name"]',
+    payeeAddressInput: 'input[name="payee.address.street"]',
+    payeeCityInput: 'input[name="payee.address.city"]',
+    payeeStateInput: 'input[name="payee.address.state"]',
+    payeeZipCodeInput: 'input[name="payee.address.zipCode"]',
+    payeePhoneNumberInput: 'input[name="payee.phoneNumber"]',
+    payeeAccountNumberInput: 'input[name="payee.accountNumber"]',
+    verifyAccountInput: 'input[name="verifyAccount"]',
+    amountInput: 'input[name="amount"]',
     fromAccountSelect: 'select[name="fromAccountId"]',
     sendPaymentButton: 'input[type="button"][value="Send Payment"]',
     billPayResult: '#billpayResult',
@@ -39,57 +39,39 @@ export class BillPay extends Authenticated {
   }
 
   get payeeNameInput() {
-    return this.billPayForm.getByRole('textbox', {
-      name: BillPay.SELECTORS.payeeNameInput,
-    })
+    return this.billPayForm.locator(BillPay.SELECTORS.payeeNameInput)
   }
 
   get payeeAddressInput() {
-    return this.billPayForm.getByRole('textbox', {
-      name: BillPay.SELECTORS.payeeAddressInput,
-    })
+    return this.billPayForm.locator(BillPay.SELECTORS.payeeAddressInput)
   }
 
   get payeeCityInput() {
-    return this.billPayForm.getByRole('textbox', {
-      name: BillPay.SELECTORS.payeeCityInput,
-    })
+    return this.billPayForm.locator(BillPay.SELECTORS.payeeCityInput)
   }
 
   get payeeStateInput() {
-    return this.billPayForm.getByRole('textbox', {
-      name: BillPay.SELECTORS.payeeStateInput,
-    })
+    return this.billPayForm.locator(BillPay.SELECTORS.payeeStateInput)
   }
 
   get payeeZipCodeInput() {
-    return this.billPayForm.getByRole('textbox', {
-      name: BillPay.SELECTORS.payeeZipCodeInput,
-    })
+    return this.billPayForm.locator(BillPay.SELECTORS.payeeZipCodeInput)
   }
 
   get payeePhoneNumberInput() {
-    return this.billPayForm.getByRole('textbox', {
-      name: BillPay.SELECTORS.payeePhoneNumberInput,
-    })
+    return this.billPayForm.locator(BillPay.SELECTORS.payeePhoneNumberInput)
   }
 
   get payeeAccountNumberInput() {
-    return this.billPayForm.getByRole('textbox', {
-      name: BillPay.SELECTORS.payeeAccountNumberInput,
-    })
+    return this.billPayForm.locator(BillPay.SELECTORS.payeeAccountNumberInput)
   }
 
   get verifyAccountInput() {
-    return this.billPayForm.getByRole('textbox', {
-      name: BillPay.SELECTORS.verifyAccountInput,
-    })
+    return this.billPayForm.locator(BillPay.SELECTORS.verifyAccountInput)
   }
 
   get amountInput() {
-    return this.billPayForm.getByRole('textbox', {
-      name: BillPay.SELECTORS.amountInput,
-    })
+    return this.billPayForm.locator(BillPay.SELECTORS.amountInput)
   }
 
   get fromAccountSelect() {
@@ -97,7 +79,8 @@ export class BillPay extends Authenticated {
   }
 
   get sendPaymentButton() {
-    return this.billPayForm.locator(BillPay.SELECTORS.sendPaymentButton)
+    // return this.billPayForm.locator(BillPay.SELECTORS.sendPaymentButton)
+    return this.page.getByRole('button', { name: 'Send Payment' })
   }
 
   get billPayResult() {
@@ -130,11 +113,8 @@ export class BillPay extends Authenticated {
     return await this.billPayResult.getByRole('paragraph').first().textContent()
   }
 
-  // Bill Payment to test in the amount of $1.75 from account 14232 was successful.
   async verifyBillPayMessage(details: BillPayDetails) {
-    const expectedMessage = `Bill Payment to ${details.payee.name}\
-    in the amount of $${details.amount.toFixed(2)} \
-    from account ${details.fromAccount.accountId} was successful.`
+    const expectedMessage = `Bill Payment to ${details.payee.name} in the amount of $${details.amount.toFixed(2)} from account ${details.fromAccount.accountId} was successful.`
     const actualMessage = (await this.getBillPayMessage())?.trim()
     expect.soft(actualMessage).toBe(expectedMessage)
   }

@@ -9,7 +9,10 @@ export const LABELS = {
   servicesHeader: 'Available Bookstore SOAP services:',
 }
 
-export const BALANCES = {
-  initialAccountBalance: 515.5, // Default initial balance for a newly registered user
-  newAccountBalance: 100, // Default balance transferred to a newly opened account
-}
+// Default balance transferred to a newly opened account
+export const NEW_ACCOUNT_BALANCE = 100
+
+export const ACCOUNT_TYPE = {
+  SAVINGS: 'SAVINGS',
+  CHECKING: 'CHECKING',
+} as const

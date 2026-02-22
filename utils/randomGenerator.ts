@@ -4,8 +4,8 @@ import { Account, Address, BillPayDetails, BillPayee, User } from './types'
 export function generateRandomUserData(): User {
   const firstName = randomFirstName()
   const lastName = randomLastName()
-  const username =
-    `${faker.internet.username()}_${faker.string.numeric(2)}`.toLowerCase()
+  const randomUsername = faker.internet.username().slice(0, 16)
+  const username = `${randomUsername}_${faker.string.numeric(3)}`.toLowerCase()
   return {
     firstName: firstName,
     lastName: lastName,
@@ -31,9 +31,10 @@ function randomLastName(): string {
 
 function randomAddress(): Address {
   return {
-    street: fakerEN_AU.location.streetAddress(),
-    city: fakerEN_AU.location.city(),
-    state: fakerEN_AU.location.state(),
+    // Limit number of characters to avoid issues with DB insertion
+    street: fakerEN_AU.location.streetAddress().slice(0, 45),
+    city: fakerEN_AU.location.city().slice(0, 20),
+    state: fakerEN_AU.location.state({ abbreviated: true }),
     zipCode: fakerEN_AU.location.zipCode(),
   }
 }
